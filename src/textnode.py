@@ -2,12 +2,12 @@ from enum import Enum
 from htmlnode import LeafNode
 
 class TextType(Enum):
-    TEXT = None
-    BOLD = "b"
-    ITALIC = "i"
+    TEXT = "text"
+    BOLD = "bold"
+    ITALIC = "italic"
     CODE = "code"
-    LINK = "a"
-    IMG = "img"
+    LINK = "link"
+    IMG = "image"
 
 class TextNode():
     def __init__(self, text, text_type, url= None):
@@ -22,7 +22,7 @@ class TextNode():
             return True
         
     def __repr__(self):
-        return f"TextNode({self.text},{self.text_type},{self.url})"
+        return f"TextNode({self.text}, {self.text_type}, {self.url})"
 
 def text_node_to_html_node(text_node):
         match(text_node.text_type):
@@ -39,4 +39,4 @@ def text_node_to_html_node(text_node):
             case(TextType.IMG):
                 return LeafNode("img", "", {"src": text_node.url, "alt": text_node.text})
             case _:
-                raise Exception("invalid text type")
+                raise Exception(f"invalid text type: {text_node.text_type}")

@@ -1,6 +1,8 @@
 import unittest
 
 from textnode import TextNode, TextType, text_node_to_html_node
+from inline_converter import split_nodes_delimiter
+
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
@@ -28,6 +30,6 @@ class TestTextNode(unittest.TestCase):
         html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.tag, None)
         self.assertEqual(html_node.value, "This is a text node")
-
+        
 if __name__ == "__main__":
     unittest.main()
