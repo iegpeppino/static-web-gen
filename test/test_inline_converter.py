@@ -1,7 +1,7 @@
 import unittest
 
-from textnode import TextNode, TextType, text_node_to_html_node
-from inline_converter import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_images, text_to_textnodes
+from src.textnode import TextNode, TextType, text_node_to_html_node
+from src.inline_converter import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_images, text_to_textnodes
 
 class TestInlineConverter(unittest.TestCase):
 
