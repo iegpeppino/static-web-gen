@@ -44,6 +44,7 @@ def split_nodes_images(old_nodes):
         images = extract_markdown_images(node.text)        
         if len(images) == 0:
             new_nodes.append(node) # If the node has no img or link item append directly
+            continue
         for image in images:
             sections = node.text.split(f"![{image[0]}]({image[1]})", 1) # image[0] is alt_text and image[1] is img_url
             if len(sections) != 2:
@@ -52,6 +53,7 @@ def split_nodes_images(old_nodes):
                 new_nodes.append(TextNode(sections[0], TextType.TEXT))  # If previous section to img has text, append as textype.text node
             new_nodes.append(TextNode(image[0], TextType.IMG, image[1]))
             original_text = sections[1]
+            print(sections[0])
         if original_text != "":
             new_nodes.append(TextNode(original_text, TextType.TEXT))
     return new_nodes
@@ -79,3 +81,12 @@ def split_nodes_links(old_nodes):
     return new_nodes
 
 
+def text_to_textnodes(text):
+    nodes = [TextNode(text, TextType.TEXT)]
+    nodes = split_nodes_delimiter(nodes, "**", TextType.BOLD)
+    nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC) 
+    nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
+    nodes = split_nodes_images(nodes)
+    nodes = split_nodes_links(nodes)
+    print(nodes)
+    return nodes

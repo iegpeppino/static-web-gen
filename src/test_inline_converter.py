@@ -1,7 +1,7 @@
 import unittest
 
 from textnode import TextNode, TextType, text_node_to_html_node
-from inline_converter import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_images
+from inline_converter import split_nodes_delimiter, extract_markdown_images, extract_markdown_links, split_nodes_images, text_to_textnodes
 
 class TestInlineConverter(unittest.TestCase):
 
@@ -132,6 +132,22 @@ class TestInlineConverter(unittest.TestCase):
             [TextNode("This textnode contains an image ", TextType.TEXT),
             TextNode("image_alt", TextType.IMG, "https://image.url"),]
             )
+
+    def test_text_to_textenodes_simple(self):
+        text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        self.assertEqual(text_to_textnodes(text),
+                        [TextNode("This is ", TextType.TEXT),
+                        TextNode("text", TextType.BOLD),
+                        TextNode(" with an ", TextType.TEXT),
+                        TextNode("italic", TextType.ITALIC),
+                        TextNode(" word and a ", TextType.TEXT),
+                        TextNode("code block", TextType.CODE),
+                        TextNode(" and an ", TextType.TEXT),
+                        TextNode("obi wan image", TextType.IMG, "https://i.imgur.com/fJRm4Vk.jpeg"),
+                        TextNode(" and a ", TextType.TEXT),
+                        TextNode("link", TextType.LINK, "https://boot.dev"),
+                    ]
+                    )
 
 if __name__ == "__main__":
     unittest.main()
