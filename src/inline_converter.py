@@ -51,7 +51,7 @@ def split_nodes_images(old_nodes):
                 raise ValueError("invalid markdown, image section not closed")
             if sections[0] != "":
                 new_nodes.append(TextNode(sections[0], TextType.TEXT))  # If previous section to img has text, append as textype.text node
-            new_nodes.append(TextNode(image[0], TextType.IMG, image[1]))
+            new_nodes.append(TextNode(image[0], TextType.IMAGE, image[1]))
             original_text = sections[1]
         if original_text != "":
             new_nodes.append(TextNode(original_text, TextType.TEXT))

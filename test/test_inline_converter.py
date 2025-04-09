@@ -130,7 +130,7 @@ class TestInlineConverter(unittest.TestCase):
         self.assertEqual(
             split_nodes_images([node]),
             [TextNode("This textnode contains an image ", TextType.TEXT),
-            TextNode("image_alt", TextType.IMG, "https://image.url"),]
+            TextNode("image_alt", TextType.IMAGE, "https://image.url"),]
             )
 
     def test_text_to_textenodes_simple(self):
@@ -143,7 +143,7 @@ class TestInlineConverter(unittest.TestCase):
                         TextNode(" word and a ", TextType.TEXT),
                         TextNode("code block", TextType.CODE),
                         TextNode(" and an ", TextType.TEXT),
-                        TextNode("obi wan image", TextType.IMG, "https://i.imgur.com/fJRm4Vk.jpeg"),
+                        TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
                         TextNode(" and a ", TextType.TEXT),
                         TextNode("link", TextType.LINK, "https://boot.dev"),
                     ]

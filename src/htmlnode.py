@@ -38,7 +38,7 @@ class ParentNode(HTMLNode):
     def to_html(self):
         if not self.tag:
             raise ValueError("tag is missing")
-        elif not self.children:
+        if not self.children:
             raise ValueError("must define children")
         elif self.props:
             return f"<{self.tag} {self.props_to_html()}>{"".join(map(lambda x: x.to_html(), self.children))}</{self.tag}>"
