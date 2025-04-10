@@ -1,5 +1,5 @@
 import unittest
-from src.block_converter import BlockType, markdown_to_blocks, block_to_blocktype, markdown_to_html_node
+from src.block_converter import BlockType, markdown_to_blocks, block_to_blocktype, markdown_to_html_node, extract_title
 
 class TestBlockConverter(unittest.TestCase):
 
@@ -104,4 +104,25 @@ class TestBlockConverter(unittest.TestCase):
             html,
             "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
         )
-        
+    
+    def extract_title_simple(self):
+        md = """
+            This is some markdown text
+            ## this heading is not the first
+            ```code things```
+            # This is the right title!
+            ### Another incorrect heading
+            """
+        title = extract_title(md)
+        self.asserEqual(title, "This is the right title!")
+
+    def extract_title_multiple_h1(self):
+        md = """
+            ## some title
+            # THE TITLE
+            # NOT THIS ONE
+            # NEITHER THIS 
+            # OR THAT ONE
+            """
+        title = extract_title(md)
+        self.assertEqual(title, "THE TITLE")

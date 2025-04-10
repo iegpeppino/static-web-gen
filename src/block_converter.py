@@ -12,27 +12,26 @@ class BlockType(Enum):
     UNORDERED_LIST = "unordered_list"
     ORDERED_LIST = "ordered_list"
 
-"""
-Splits markdown text to blocks
-disregarding any empty lines
-"""
+
 def markdown_to_blocks(markdown):
+    """Splits markdown text to blocks disregarding any empty lines"""
     no_ws = markdown.strip()
     sentences = no_ws.split("\n\n")
     for i in range(len(sentences)):
         if sentences[i] == "":
             sentences.pop(i)
-        sentences[i] = re.sub(r'\n\s+', '\n', sentences[i].strip()) # Replaces line breaks followed by whitespace with just a line break character
+        else: 
+            sentences[i] = sentences[i].strip()
+            sentences[i] = re.sub(r'\n\s+', '\n', sentences[i]) # Replaces line breaks followed by whitespace with just a line break character
     return sentences
 
-"""
-Using regex to find if the blocks start
-with a markdown element and return their
-respective BlockType.
-If if doesn't match any of the cases it
-is identified as a Paragraph type of block
-"""
+
 def block_to_blocktype(block):
+    """Using regex to find if the blocks start
+    with a markdown element and return their
+    respective BlockType. If if doesn't match any of the cases 
+    it is identified as a Paragraph type of block
+    """
     lines = block.split("\n")
     if re.search(r'^#{1,6}\s', block):
         return BlockType.HEADING
@@ -55,14 +54,14 @@ def block_to_blocktype(block):
             return BlockType.ORDERED_LIST
     return BlockType.PARAGRAPH
 
-"""
-This function separetes the markdown text into blocks
-then uses the helper function block_to_html_node
-to identify the type of block and create appropriately
-taged children from these blocks and finally
-enclose them into a div tag through a ParentNode object
-"""
+
 def markdown_to_html_node(markdown):
+    """This function separetes the markdown text into blocks
+    then uses the helper function block_to_html_node
+    to identify the type of block and create appropriately
+    taged children from these blocks and finally
+    enclose them into a div tag through a ParentNode object
+    """
     blocks =  markdown_to_blocks(markdown)
     children = []
     for block in blocks:
@@ -71,14 +70,14 @@ def markdown_to_html_node(markdown):
     return ParentNode("div", children, None)
 
 
-"""
-Helper function to return block's type
-through the previously declared function
-block_to_blocktype. Then it matches the block_type
-with a function that creates a ParentNode with the 
-necessary tag and children for the block
-"""
+
 def block_to_html_node(block):
+    """Helper function to return block's type
+    through the previously declared function
+    block_to_blocktype. Then it matches the block_type
+    with a function that creates a ParentNode with the 
+    necessary tag and children for the block
+    """
     block_type = block_to_blocktype(block)
     match(block_type):
         case(BlockType.HEADING):
@@ -97,15 +96,15 @@ def block_to_html_node(block):
             raise ValueError('unidentified block type')
 
 
-"""
-This helper function creates a list of children
-using the text_to_text node to first create nodes
-based on text modifiers such as bold or italic and
-then iterates over each node and converts it into 
-a html_node using the text_node_to_html_node function
-"""
+
 
 def text_to_children(text):
+    """ This helper function creates a list of children
+    using the text_to_text node to first create nodes
+    based on text modifiers such as bold or italic and
+    then iterates over each node and converts it into 
+    a html_node using the text_node_to_html_node function
+    """
     text_nodes = text_to_textnodes(text)
     children = []
     for text_node in text_nodes:
@@ -147,8 +146,8 @@ def ol_to_htmlnode(block):
     for item in items:          # Then it is added as a children
         list_text = item[3:]    # to a "ol" parent node
         children = text_to_children(list_text)
-        list_items.append(ParentNode("li", children= children))
-    return ParentNode("ol", list_items)
+        list_items.append(ParentNode(tag="li", children= children))
+    return ParentNode(tag="ol", children=list_items)
 
 def ul_to_htmlnode(block):
     items = block.split("\n")
@@ -156,8 +155,8 @@ def ul_to_htmlnode(block):
     for item in items:
         list_text = item[2:]
         children = text_to_children(list_text)
-        list_items.append(ParentNode("li", children= children))
-    return ParentNode("ul", list_items)
+        list_items.append(ParentNode(tag="li", children= children))
+    return ParentNode(tag="ul", children=list_items)
 
 def p_to_htmlnode(block):
     sentences = block.split("\n")    
@@ -165,4 +164,10 @@ def p_to_htmlnode(block):
     children = text_to_children(p_block)
     return ParentNode("p", children= children)
 
-
+def extract_title(markdown):
+    """Extracts the first H1 present in the markdown text"""
+    title = re.search(r'^#{1}\s+.*$', markdown, re.MULTILINE) #return only matches at beggining of line
+    if title:
+        return title.group()
+    else:
+        raise Exception("No h1 heading found")

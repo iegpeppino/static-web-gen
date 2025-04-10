@@ -1,10 +1,10 @@
 
 class HTMLNode():
-    def __init__(self, tag, value, children, props):
-        self.tag = tag if tag else None
-        self.value = value if value else None
-        self.children = children if children else None
-        self.props = props if props else None
+    def __init__(self, tag=None, value=None, children=None, props=None):
+        self.tag = tag
+        self.value = value
+        self.children = children
+        self.props = props
 
     def to_html(self):
         raise NotImplementedError
@@ -32,9 +32,7 @@ class HTMLNode():
 class ParentNode(HTMLNode):
     def __init__(self, tag, children, props=None):
         super().__init__(tag, None, children, props)
-        self.tag = tag              # tag and children args are not optional
-        self.children = children
-
+        
     def to_html(self):
         if not self.tag:
             raise ValueError("tag is missing")
@@ -48,8 +46,8 @@ class ParentNode(HTMLNode):
             #return f"<{self.tag}>{map(self.to_html(),self.children).join()}</{self.tag}>"
 
 class LeafNode(HTMLNode):
-    def  __init__(self, tag, value, props=None):                 # There can be no children in Leaf so I pass "None"          
-        super().__init__(tag, value, None ,props)           # to the super constructor on the children arg     
+    def __init__(self, tag, value, props=None):
+        super().__init__(tag, value, None, props)           # to the super constructor on the children arg     
 
     def to_html(self):
         if self.value is None:
