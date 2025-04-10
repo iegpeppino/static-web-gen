@@ -19,12 +19,14 @@ def clear_directory(path):
         os.makedirs(path)
         print(f"Created directory: {path}")
 
-def copy_directory(src, dest):
-    if not os.path.exists(dest): # If the desired destiny path 
-        os.makedirs(dest)       # doesn't exist, it is created
-    for item in os.listdir(src):
-        src_path = os.path.join(src, item)
-        dest_path = os.path.join(dest, item)
+def copy_directory(src_path, dest_path):
+    """Copies files from one directory to another"""
+    # If path doesn't exist it is created
+    if not os.path.exists(dest_path):
+        os.makedirs(dest_path)       
+    for item in os.listdir(src_path):
+        src_path = os.path.join(src_path, item)
+        dest_path = os.path.join(dest_path, item)
 
         if os.path.isdir(src_path):
             copy_directory(src_path, dest_path)
