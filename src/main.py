@@ -8,9 +8,9 @@ CONTENT_DIR_PATH = "./content"
 TEMPLATE_PATH = "./template.html"
 
 def main():
-    basepath = sys.argv[0]
-    if not basepath:
-        basepath = "/"
+    basepath = "/"
+    if len(sys.argv) > 1:
+        basepath = sys.argv[1]
     move_static_to_public(STATIC_DIR_PATH, PUBLIC_DIR_PATH)
     generate_pages_recursive(CONTENT_DIR_PATH, TEMPLATE_PATH, PUBLIC_DIR_PATH, basepath)
     

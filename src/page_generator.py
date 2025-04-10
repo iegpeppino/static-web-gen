@@ -34,8 +34,10 @@ def generate_page(from_path, template_path, dest_path, basepath):
     # html node converted to string
     html_string = converted_md.to_html()
     # Fill the empty template with the html string and extracted title
-    template = template.replace("{{ Title }}", title).replace("{{ Content }}", html_string)
-    template = template.replace('href"=/', f'href="{basepath}').replace('src="/', f'src="{basepath}')
+    template = template.replace("{{ Title }}", title)
+    template = template.replace("{{ Content }}", html_string)
+    template = template.replace('href="/', f'href="' + basepath)
+    template = template.replace('src="/', f'src="' + basepath)
     
     # Making sure the destiny directory exists
     os.makedirs(os.path.dirname(dest_path), exist_ok=True) 
